@@ -35,6 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   tbib_loading_transition_button_and_social :
      path: ../
+  font_awesome_flutter: ^10.0.0-beta
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
