@@ -100,6 +100,7 @@ final _controller = LoadingSignButtonController();
 
 ```dart
 LoadingSignButton(
+  controller: _controller,
   buttonType: ButtonType.google,
   onPressed: () {
    print('click');
@@ -109,7 +110,7 @@ LoadingSignButton(
 
 ButtonSize
 ```dart
-SignInButton(
+LoadingSignButton(
   controller: _controller,
   buttonType: ButtonType.google,
   buttonSize: ButtonSize.large, // small(default), medium, large
@@ -120,8 +121,8 @@ SignInButton(
 
 ImagePosition
 ```dart
-SignInButton(
-controller: _controller,
+LoadingSignButton(
+  controller: _controller,
   imagePosition: ImagePosition.left, // left or right
   buttonType: ButtonType.google,
   onPressed: () {
@@ -150,7 +151,7 @@ controller: _controller,
 Disabled Button
 
 ```dart
-SignInButton(
+LoadingSignButton(
  controller: _controller,
  buttonType: ButtonType.facebook,
  onPressed: null,

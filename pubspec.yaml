@@ -1,6 +1,6 @@
 name: tbib_loading_transition_button_and_social
 description: A Flutter plugin for generating sign in buttons for different social media accounts And ustomizable transition button for Flutter. Animate you loading proccess with ease.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/the-best-is-best/tbib_loading_transition_button_and_social
 
 environment:
