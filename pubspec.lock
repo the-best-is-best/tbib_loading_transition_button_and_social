@@ -73,14 +73,7 @@ packages:
       name: font_awesome_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.2.0"
-  lint:
-    dependency: "direct dev"
-    description:
-      name: lint
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.7.2"
+    version: "10.0.0-beta"
   lints:
     dependency: transitive
     description:
@@ -171,5 +164,5 @@ packages:
     source: hosted
     version: "2.1.0"
 sdks:
-  dart: ">=2.14.0-360.0.dev <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
