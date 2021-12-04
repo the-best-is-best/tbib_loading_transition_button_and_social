@@ -92,6 +92,12 @@ Now in your Dart code, you can use:
 
 It very simple!
 
+In order to use this widget you have to use a `LoadingSignButtonController` to handler the different states.
+
+```dart
+final _controller = LoadingSignButtonController();
+```
+
 ```dart
 LoadingSignButton(
   buttonType: ButtonType.google,
@@ -104,6 +110,7 @@ LoadingSignButton(
 ButtonSize
 ```dart
 SignInButton(
+  controller: _controller,
   buttonType: ButtonType.google,
   buttonSize: ButtonSize.large, // small(default), medium, large
   onPressed: () {
@@ -114,6 +121,7 @@ SignInButton(
 ImagePosition
 ```dart
 SignInButton(
+controller: _controller,
   imagePosition: ImagePosition.left, // left or right
   buttonType: ButtonType.google,
   onPressed: () {
@@ -124,6 +132,7 @@ SignInButton(
 Customized Button
 ```dart
 LoadingSignButton(
+controller: _controller,
  buttonType: ButtonType.pinterest,
  imagePosition: ImagePosition.right,
  //[buttonSize] You can also use this in combination with [width]. Increases the font and icon size of the button.
@@ -142,6 +151,7 @@ Disabled Button
 
 ```dart
 SignInButton(
+ controller: _controller,
  buttonType: ButtonType.facebook,
  onPressed: null,
 ),
