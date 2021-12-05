@@ -102,6 +102,7 @@ final _controller = LoadingSignButtonController();
 LoadingSignButton(
   controller: _controller,
   buttonType: ButtonType.google,
+
   onPressed: () {
    print('click');
   })
@@ -140,7 +141,9 @@ controller: _controller,
  buttonSize: ButtonSize.large,
  btnTextColor: Colors.grey,
  btnColor: Colors.white,
- //[width] Use if you change the text value.
+ //[width] Use it to change width button.
+  //[height] Use it to change height button.
+
  btnText: 'Pinterest',
  onPressed: () {
   print('click');
@@ -167,3 +170,7 @@ LoadingSignButton.mini(
  onPressed: () {},
 ),
 ```
+
+# TBIB Loading Transition button
+
+![AnimatedButton](https://raw.githubusercontent.com/the-best-is-best/tbib_loading_transition_button_and_social/master/src/example1.gif)
