@@ -37,7 +37,7 @@ class LoadingSignButton extends StatefulWidget {
 
   // new
   ///  widget success for error state
-  final Widget? successWidget;
+  final Widget successWidget;
 
   // new
   /// Duration for the  success button animation.
@@ -73,14 +73,11 @@ class LoadingSignButton extends StatefulWidget {
 
   final double height;
 
-  /// [_fontSize] value cannot be assigned.Gets value according to [buttonSize].
-  double? _fontSize;
+  /// [fontSize] value cannot be assigned.Gets value according to [buttonSize].
+  double fontSize;
 
-  /// [_imageSize] value cannot be assigned.Gets value according to [buttonSize].
-  double? _imageSize;
-  //not required, default small
-  /// [buttonSize] set the size of the button. (small medium large)
-  final ButtonSize buttonSize;
+  /// [imageSize] value cannot be assigned.Gets value according to [buttonSize].
+  double imageSize;
 
   //not required, Gets value according to buttonType.
   /// [btnText] set the button's text.
@@ -88,6 +85,8 @@ class LoadingSignButton extends StatefulWidget {
 
   /// [mini] It automatically takes value according to the selected constructor.
   bool mini;
+  final double? boarderSize;
+  final BorderSide? boarderSide;
 
   /// A button that respresents a loading and errored stated
   /// if given a [LoadingSignButtonController], this widget can use the [moveToScreen]
@@ -101,43 +100,52 @@ class LoadingSignButton extends StatefulWidget {
     this.transitionDuration = const Duration(milliseconds: 400),
     this.onSubmit,
     this.imagePosition = ImagePosition.left,
-    this.buttonSize = ButtonSize.small,
     this.padding,
     this.btnText,
-    this.width,
+    this.fontSize = 20,
+    this.imageSize = 30,
+    this.width = 300,
     this.height = 30,
     required this.controller,
     this.errorColor = Colors.red,
 
     //new
-    this.successWidget,
+    this.successWidget =
+        const Icon(Icons.check_box, size: 16, color: Colors.green),
     this.durationSuccess = const Duration(milliseconds: 400),
+    this.boarderSize,
+    this.boarderSide,
   })  : assert(duration.inMilliseconds > 0),
         mini = false,
         super(key: key);
 
-  LoadingSignButton.mini({
-    Key? key,
-    required this.buttonType,
-    this.color,
-    this.progressIndicatorColor,
-    this.duration = const Duration(milliseconds: 300),
-    this.transitionDuration = const Duration(milliseconds: 400),
-    this.onSubmit,
-    this.buttonSize = ButtonSize.small,
-    this.padding,
-    this.width,
-    this.height = 30,
-    required this.controller,
-    this.errorColor = Colors.red,
+  LoadingSignButton.mini(
+      {Key? key,
+      required this.buttonType,
+      this.color,
+      this.progressIndicatorColor,
+      this.duration = const Duration(milliseconds: 300),
+      this.transitionDuration = const Duration(milliseconds: 400),
+      this.onSubmit,
+      this.padding,
+      this.width = 60,
+      this.height = 30,
+      required this.controller,
+      this.errorColor = Colors.red,
+      this.fontSize = 20,
+      this.imageSize = 20,
 
-    //new
-    this.successWidget,
-    this.durationSuccess = const Duration(milliseconds: 400),
-  })  : assert(duration.inMilliseconds > 0),
+      //new
+      this.successWidget =
+          const Icon(Icons.check_box, size: 16, color: Colors.green),
+      this.durationSuccess = const Duration(milliseconds: 400),
+      this.boarderSize,
+      this.boarderSide})
+      : assert(duration.inMilliseconds > 0),
         mini = true,
         super(key: key);
   @override
+  // ignore: library_private_types_in_public_api
   _LoadginButtonState createState() => _LoadginButtonState();
 }
 
@@ -174,6 +182,7 @@ class _LoadginButtonState extends State<LoadingSignButton>
     )..addListener(() => setState(() {}));
 
     super.initState();
+    // ignore: avoid_print
   }
 
   @override
@@ -182,11 +191,18 @@ class _LoadginButtonState extends State<LoadingSignButton>
   }
 
   @override
+  void didUpdateWidget(covariant LoadingSignButton oldWidget) {
+    // ignore: todo
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    _createStyle(context);
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _durationSuccess = widget.durationSuccess;
 
-    _setButtonSize();
     _createStyle(context);
     routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
 
@@ -236,25 +252,6 @@ class _LoadginButtonState extends State<LoadingSignButton>
     return v.Vector3(offset, 0.0, 0.0);
   }
 
-  void _setButtonSize() {
-    if (widget.buttonSize == ButtonSize.small) {
-      widget.padding ??= !widget.mini ? 5.0 : 6.0;
-      widget.width ??= 200;
-      widget._fontSize = 15.0;
-      widget._imageSize = !widget.mini ? 24.0 : 30.0;
-    } else if (widget.buttonSize == ButtonSize.medium) {
-      widget.padding ??= !widget.mini ? 5.5 : 6.5;
-      widget.width ??= 220;
-      widget._fontSize = 17.0;
-      widget._imageSize = !widget.mini ? 28.0 : 34.0;
-    } else {
-      widget.padding ??= !widget.mini ? 6.0 : 7.0;
-      widget.width ??= 250;
-      widget._fontSize = 19.0;
-      widget._imageSize = !widget.mini ? 32.0 : 38.0;
-    }
-  }
-
   void _createStyle(BuildContext context) {
     widget.btnDisabledColor ??=
         Theme.of(context).disabledColor.withOpacity(0.12);
@@ -264,8 +261,8 @@ class _LoadginButtonState extends State<LoadingSignButton>
     widget._image = Image.asset(
       'images/${describeEnum(widget.buttonType)}.png',
       package: 'tbib_loading_transition_button_and_social',
-      width: widget._imageSize,
-      height: widget._imageSize,
+      width: widget.imageSize,
+      height: widget.imageSize,
     );
 
     if (_disabled) {
@@ -431,34 +428,7 @@ class _LoadginButtonState extends State<LoadingSignButton>
                     valueColor: const AlwaysStoppedAnimation(Colors.white),
                   )
                 : _isLoading && _isSuccess
-                    ? widget.successWidget ??
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment:
-                              widget.imagePosition == ImagePosition.left
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.all(widget.padding ?? 0),
-                                child:
-                                    widget.imagePosition == ImagePosition.left
-                                        ? widget._image
-                                        : _text(),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.all(widget.padding ?? 0),
-                                child:
-                                    widget.imagePosition == ImagePosition.left
-                                        ? _text()
-                                        : widget._image,
-                              ),
-                            ),
-                          ],
-                        )
+                    ? widget.successWidget
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment:
@@ -495,10 +465,7 @@ class _LoadginButtonState extends State<LoadingSignButton>
                     valueColor: AlwaysStoppedAnimation(Colors.white),
                   )
                 : _isLoading && _isSuccess
-                    ? widget.successWidget ??
-                        SizedBox(
-                          child: widget._image,
-                        )
+                    ? widget.successWidget
                     : SizedBox(
                         child: widget._image,
                       ),
@@ -509,7 +476,7 @@ class _LoadginButtonState extends State<LoadingSignButton>
     return Text(
       widget.btnText!,
       style: TextStyle(
-        fontSize: widget._fontSize,
+        fontSize: widget.fontSize,
         color: _enabled ? widget.btnTextColor : widget.btnDisabledTextColor,
       ),
     );
@@ -553,8 +520,9 @@ class _LoadginButtonState extends State<LoadingSignButton>
                     : _submitAndAnimate(),
                 fillColor: widget.color,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(constraints.maxHeight / 2),
+                  side: widget.boarderSide ?? BorderSide.none,
+                  borderRadius: BorderRadius.circular(
+                      widget.boarderSize ?? constraints.maxHeight / 2),
                 ),
                 child: _getChildWidget(context),
               ),
@@ -624,8 +592,9 @@ class _LoadginButtonState extends State<LoadingSignButton>
     final finalRect = rect.inflate(MediaQuery.of(context).size.longestSide);
 
     final radiusTween = BorderRadiusTween(
-      begin: BorderRadius.circular(buttonSize.height / 2),
-      end: BorderRadius.circular(finalRect.size.height / 2),
+      begin: BorderRadius.circular(widget.boarderSize ?? buttonSize.height / 2),
+      end: BorderRadius.circular(
+          widget.boarderSize ?? finalRect.size.height / 2),
     );
 
     final sizeTween = SizeTween(

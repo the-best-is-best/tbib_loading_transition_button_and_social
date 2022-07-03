@@ -25,9 +25,3 @@ enum ImagePosition {
   left,
   right,
 }
-
-enum ButtonSize {
-  small,
-  medium,
-  large,
-}

@@ -21,11 +21,11 @@ class LoadingButton extends StatefulWidget {
 
   /// Background color for error state
   /// if null, it will use [color] by default
-  final Color? errorColor;
+  final Color errorColor;
 
   // new
   ///  widget success for error state
-  final Widget? successWidget;
+  final Widget successWidget;
 
   // new
   /// Duration for the  success button animation.
@@ -44,6 +44,10 @@ class LoadingButton extends StatefulWidget {
   /// The child widget for the loading button
   final Widget child;
 
+  final Color progressIndicatorColor;
+  final double? borderSize;
+  final BorderSide? borderSide;
+
   /// A button that respresents a loading and errored stated
   /// if given a [LoadingButtonController], this widget can use the [moveToScreen]
   /// to animate a transition to a new page
@@ -55,16 +59,21 @@ class LoadingButton extends StatefulWidget {
     this.onSubmit,
     required this.controller,
     required this.child,
-    this.errorColor,
+    this.errorColor = Colors.red,
     this.width = 100,
     this.height = 30,
+    this.progressIndicatorColor = Colors.black,
     //new
-    this.successWidget,
-    this.durationSuccess = const Duration(milliseconds: 400),
+    this.successWidget =
+        const Icon(Icons.check_box, size: 16, color: Colors.green),
+    this.durationSuccess = const Duration(milliseconds: 1000),
+    this.borderSize = 8,
+    this.borderSide,
   })  : assert(duration.inMilliseconds > 0),
         super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoadginButtonState createState() => _LoadginButtonState();
 }
 
@@ -102,6 +111,14 @@ class _LoadginButtonState extends State<LoadingButton>
   }
 
   @override
+  void didUpdateWidget(LoadingButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _durationSuccess = widget.durationSuccess;
+    _buttonColor = widget.color ?? Theme.of(context).colorScheme.secondary;
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+  }
+
+  @override
   didPopNext() {
     setState(() => _isLoading = false);
   }
@@ -115,7 +132,7 @@ class _LoadginButtonState extends State<LoadingButton>
 
     Animation startColor = ColorTween(
       begin: widget.color,
-      end: widget.errorColor ?? widget.color,
+      end: widget.errorColor,
     ).animate(
       CurvedAnimation(
         parent: _controller,
@@ -128,7 +145,7 @@ class _LoadginButtonState extends State<LoadingButton>
     });
 
     Animation endColor = ColorTween(
-      begin: widget.errorColor ?? widget.color,
+      begin: widget.errorColor,
       end: widget.color,
     ).animate(
       CurvedAnimation(
@@ -145,7 +162,7 @@ class _LoadginButtonState extends State<LoadingButton>
   @override
   void dispose() {
     _controller.dispose();
-    routeObserver.unsubscribe(this);
+    //routeObserver.unsubscribe(this);
 
     super.dispose();
   }
@@ -164,12 +181,12 @@ class _LoadginButtonState extends State<LoadingButton>
       switchOutCurve: Curves.easeInOutCubic,
       duration: widget.duration,
       child: _isLoading && !_isSuccess
-          ? const CircularProgressIndicator(
+          ? CircularProgressIndicator(
               strokeWidth: 2.0,
-              valueColor: AlwaysStoppedAnimation(Colors.white),
+              valueColor: AlwaysStoppedAnimation(widget.progressIndicatorColor),
             )
           : _isLoading && _isSuccess
-              ? widget.successWidget ?? widget.child
+              ? widget.successWidget
               : widget.child,
     );
   }
@@ -212,8 +229,9 @@ class _LoadginButtonState extends State<LoadingButton>
                     : _submitAndAnimate(),
                 fillColor: _buttonColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(constraints.maxHeight / 2),
+                  side: widget.borderSide ?? BorderSide.none,
+                  borderRadius: BorderRadius.circular(
+                      widget.borderSize ?? constraints.maxHeight / 2),
                 ),
                 child: _getChildWidget(context),
               ),
@@ -283,8 +301,9 @@ class _LoadginButtonState extends State<LoadingButton>
     final finalRect = rect.inflate(MediaQuery.of(context).size.longestSide);
 
     final radiusTween = BorderRadiusTween(
-      begin: BorderRadius.circular(buttonSize.height / 2),
-      end: BorderRadius.circular(finalRect.size.height / 2),
+      begin: BorderRadius.circular(widget.borderSize ?? buttonSize.height / 2),
+      end:
+          BorderRadius.circular(widget.borderSize ?? finalRect.size.height / 2),
     );
 
     final sizeTween = SizeTween(

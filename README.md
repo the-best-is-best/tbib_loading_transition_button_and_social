@@ -9,7 +9,7 @@ To use this package, add `tbib_loading_transition_button_and_social` as a depend
 ```yaml
 dependencies:
  ...
- tbib_loading_transition_button_and_social: ^0.0.1
+ tbib_loading_transition_button_and_social: ^1.0.0
 ```
 
 ## How to use
@@ -62,6 +62,9 @@ _controller.moveToScreen(
 
 ```dart
 LoadingButton(
+    // v1.0.1
+    borderSize:8
+    boarderSide: BoarderSide.none, // Default
     color: Colors.blue,
     onSubmit: () => print('onSubmit'),
     controller: _controller,
@@ -109,7 +112,7 @@ LoadingSignButton(
 ```
 
 
-ButtonSize
+* ButtonSize Removed in v 1.0.0
 ```dart
 LoadingSignButton(
   controller: _controller,
@@ -120,7 +123,21 @@ LoadingSignButton(
   })
 ```
 
-ImagePosition
+* use it in v 1.0.0
+```dart
+LoadingSignButton(
+  controller: _controller,
+  buttonType: ButtonType.google,
+  width: 100,
+  height:50,
+  fontSize: 20,
+  imageSize: 16,
+  onPressed: () {
+   print('click');
+  })
+```
+
+* ImagePosition
 ```dart
 LoadingSignButton(
   controller: _controller,
@@ -131,7 +148,7 @@ LoadingSignButton(
   })
 ```
 
-Customized Button
+* Customized Button
 ```dart
 LoadingSignButton(
 controller: _controller,
@@ -151,7 +168,7 @@ controller: _controller,
 ```
 
 
-Disabled Button
+* Disabled Button
 
 ```dart
 LoadingSignButton(
